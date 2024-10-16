@@ -5,8 +5,8 @@ stages:
 # Variables pour l'image Docker et le registre
 variables:
   DOCKER_IMAGE: $REGISTRY/$PROJECT_PATH:$CI_COMMIT_REF_SLUG  # Inclure le registre et le tag de commit
-  REGISTRY: gitlab-depinfo-2024.univ-brest.fr
-  PROJECT_PATH: dosi/pic/elmoumouhi_houda/tetrisant
+  REGISTRY: registry.gitlab.com
+  PROJECT_PATH:  dosi/pic/dosi/pic/elmoumouhi_houda/tetrisant
   
 build:
   stage: build
