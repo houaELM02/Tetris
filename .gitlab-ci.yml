@@ -1,30 +1,22 @@
 stages:
   - build
   - deploy
-  
-# Variables pour l'image Docker et le registre
-variables:
-  DOCKER_IMAGE: $REGISTRY/$PROJECT_PATH:$CI_COMMIT_REF_SLUG  # Inclure le registre et le tag de commit
-  REGISTRY: registry.gitlab.com
-  PROJECT_PATH:  dosi/pic/dosi/pic/elmoumouhi_houda/tetrisant
-  
-  
-before_script:
-  - docker info
-  - docker rm -f test_container || true
-  
+
+# Job pour construire l'image Docker
 build:
   stage: build
   image: docker:24.0.2
   services:
     - docker:24.0.2-dind
   script:
-    - docker build -t $DOCKER_IMAGE .  # Construire l'image avec le nom complet
-    - docker run -d --name test_container $DOCKER_IMAGE  # Exécuter le conteneur en arrière-plan
-    - docker exec test_container ls -la .  # Lister les fichiers du conteneur
-    - docker push $DOCKER_IMAGE  # Pousser l'image vers le registre
+    # Authentification si nécessaire (décommenter si tu pushes vers un registre privé)
+    # - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+    - docker build -t registry.gitlab.com/dosi/pic/dosi/pic/elmoumouhi_houda/tetrisant:$CI_COMMIT_REF_SLUG .
   only:
     - branches
-  tags: 
-    - dosi
 
+
+
+
+
+	
