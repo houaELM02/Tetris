@@ -10,8 +10,8 @@ build:
   script:
     # Authentification si nécessaire (décommenter si tu pushes vers un registre privé)
     # - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
-	- docker build -t registry.gitlab.com/dosi/pic/elmoumouhi_houda/tetrisant:$CI_COMMIT_REF_SLUG .
+    - docker build -t registry.gitlab.com/dosi/pic/elmoumouhi_houda/tetrisant:$CI_COMMIT_REF_SLUG .
   only:
     - branches
   tags: 
-    - dosi  # Corrigé avec une indentation à 2 espaces
+    - dosi
