@@ -2,9 +2,7 @@ stages:
   - build
   - deploy
   
-job:
-  tags:
-    - dosi
+ 
   
 # Job pour construire l'image Docker
 build:
@@ -18,6 +16,8 @@ build:
     - docker build -t $CI_REGISTRY_IMAGE/tetris:$CI_COMMIT_REF_SLUG .
   only:
     - branches
+  tags: 
+	- dosi	
 
 
 # Job pour déployer l'image sur le registre Docker
