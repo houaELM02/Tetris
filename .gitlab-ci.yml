@@ -1,6 +1,6 @@
 stages:
   - build
-  - deploy
+
   
  
   
@@ -18,15 +18,3 @@ build:
     - branches
   tags: 
 	- dosi	
-
-
-# Job pour déployer l'image sur le registre Docker
-deploy:
-  stage: deploy
-  image: docker:24.0.2
-  services:
-    - docker:24.0.2-dind
-  script:
-   - docker push $CI_REGISTRY_IMAGE/tetris:$CI_COMMIT_REF_SLUG
-  only:
-    - branches
