@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="Compliation de Tetris" default="dist"  basedir=".">
+	
+	<property name="src.dir" value="src"></property>
+	<property name="test.dir" value="test"></property>
+	<property name="obj.dir" value="bin"></property>
+	<property name="libs.dir" value="lib"></property>
+	<property name ="main-class" value="fr.ubo.tetris.Tetris"></property>
+	<property name="compile.classpath" value="lib/commons-lang3-3.5.jar"></property>
+	<property name="test.classpath" value="${libs.dir}/junit-4.13.2.jar"></property>
+	<property name="test.results.dir" value="${obj.dir}/test-results"/>
+	<property name="test.reports.dir" value="${obj.dir}/test-reports"/>
+	<property name="doc.dir" value="javadoc"></property>
+	<property name="hamcrest.jar" value="${libs.dir}/hamcrest-core-1.3.jar"/>
+
+
+	<property name="version" value="1"></property>
+	<target name="retrieve">
+		<ivy:retrieve sync="true" type="jar" />
+		<ivy:settings/>
+		<ivy:resolve/>
+	</target>
+	<target name="clean">
+		<echo message="Suppression des fichiers issue de la compilation"/>
+		<delete dir="bin"/>
+		<delete dir="lib"/>
+		<mkdir dir="lib"/>
+	</target>
+	<target name="compile" depends="retrieve">
+		<mkdir dir="${obj.dir}"/>
+		<javac srcdir="${src.dir}" destdir="${obj.dir}" executable="${javac.version}">
+			<classpath>
+				<pathelement location="${compile.classpath}" />
+				<pathelement location="${test.classpath}" />
+			</classpath>
+		</javac>
+	</target>
+	
+	
+	<!-- Cible pour compiler les tests unitaires -->
+	    <target name="compil-test" depends="compile">
+	        <mkdir dir="${obj.dir}"/>
+	        <javac srcdir="${test.dir}" destdir="${obj.dir}">
+	            <classpath>
+	                <pathelement location="${obj.dir}"/>
+	                <pathelement location="${test.classpath}"/>
+	            </classpath>
+	        </javac>
+	    </target>
+
+	    <!-- Cible pour exécuter les tests unitaires -->
+	    <target name="test" depends="compil-test">
+	        <echo message="Exécution des tests unitaires..."/>
+	        <mkdir dir="${test.results.dir}"/>
+	    	<junit printsummary="true" haltonfailure="false" haltonerror="false" showoutput="true">
+	        	<classpath>
+	        	    <pathelement path="${obj.dir}"/>
+	        		<pathelement location="${hamcrest.jar}"/>
+	        	    <fileset dir="${libs.dir}">
+	        	        <include name="junit-*.jar"/>
+	        	    </fileset>
+	        	   <!-- <fileset dir="${libs.dir}">
+	        	        <include name="*.jar"/>
+	        	    </fileset>-->
+	        	</classpath>
+	    		<formatter type="xml" />
+	    		 <formatter type="plain"/>
+	    		 
+	            <batchtest todir="${test.results.dir}">
+	                <fileset dir="test">
+	                	 <include name="**/Test*.java"/>
+	                </fileset>
+	            </batchtest>
+	           
+	        </junit>
+	    	
+	        <echo message="Tests terminés. Résultats disponibles dans ${test.results.dir}"/>
+	    </target>
+	
+	        	
+	<!-- Cible pour générer les rapports des tests au format HTML -->
+		<target name="test-reports" depends="test">
+			<echo message="Génération des rapports HTML..."/>
+			<mkdir dir="${test.reports.dir}"/>
+
+
+		    <!-- Générer le rapport HTML à partir des résultats XML -->
+		    <junitreport todir="${test.reports.dir}">
+		        <fileset dir="${test.results.dir}">
+		            <include name="TEST-*.xml"/> 
+		        </fileset>
+		    	<report format="frames" todir="${test.reports.dir}" />
+		    </junitreport>
+			
+			<echo message="Rapports générés dans ${test.reports.dir}"/>
+		</target>
+	<!-- Cible pour générer la documentation Javadoc -->
+	    <target name="javadoc" depends="compile">
+	        <mkdir dir="${doc.dir}"/> <!-- Créer le répertoire pour la documentation -->
+	        <javadoc destdir="${doc.dir}" sourcepath="${src.dir}" packagenames="fr.ubo.tetris">
+	            <classpath>
+	                <pathelement path="${compile.classpath}"/>
+	                <pathelement path="${obj.dir}"/>
+	            </classpath>
+	        </javadoc>
+	    </target>
+	<target name="dist" depends="clean,compile">
+		<!--<jar destfile="Tetris.jar" basedir="bin"> </jar> -->
+		<manifest file="${obj.dir}/manifest.mf">
+			<attribute name ="main-class" value="${main-class}"/>
+			<attribute name="implementation-version" value= "${version}"/>
+			<attribute name="build-by" value="Houda"/>
+			<attribute name="class-path" value="${compile.classpath}"/>
+		</manifest>
+		<jar jarfile="Tetris.jar" basedir="${obj.dir}" manifest="${obj.dir}/manifest.mf" ></jar>
+	</target>
+	<!-- Cible pour toutes les tâches -->
+	    <target name="all" depends="dist, test-reports, javadoc">
+	        <echo message="All tasks completed successfully."/>
+	    </target>
+	
+</project>

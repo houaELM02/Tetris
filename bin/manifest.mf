@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.10.14
+Created-By: 21.0.4+7-LTS (Eclipse Adoptium)
+main-class: fr.ubo.tetris.Tetris
+implementation-version: 1
+build-by: Houda
+Class-Path: lib/commons-lang3-3.5.jar
+
