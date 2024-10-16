@@ -21,10 +21,9 @@ deploy:
   stage: deploy
   image: docker:24.0.2
   script:
-	- echo "Déploiement de l'image Docker..."
-	- docker run -d registry.gitlab.com/dosi/pic/elmoumouhi_houda/tetrisant:$CI_COMMIT_REF_SLUG  # Exemple de déploiement
+    - echo "Déploiement de l'image Docker..."
+    - docker run -d registry.gitlab.com/dosi/pic/elmoumouhi_houda/tetrisant:$CI_COMMIT_REF_SLUG  # Exemple de déploiement
   only:
-   - main  # Déployer uniquement sur la branche principale
+    - main  # Déployer uniquement sur la branche principale
   tags:
-    - dosi  # Tag pour exécuter le déploiement	
-	
+    - dosi  # Tag pour exécuter le déploiement
