@@ -1,8 +1,5 @@
 stages:
   - build
-
-  
- 
   
 # Job pour construire l'image Docker
 build:
@@ -17,4 +14,4 @@ build:
   only:
     - branches
   tags: 
-	- dosi	
+    - dosi  # Corrigé avec une indentation à 2 espaces
