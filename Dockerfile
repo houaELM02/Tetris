@@ -16,3 +16,5 @@ COPY . .
 RUN ant -lib dependencies compile
 
 RUN ant -lib dependencies test
+
+RUN ls -la /app
