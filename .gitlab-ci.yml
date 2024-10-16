@@ -3,8 +3,8 @@ stages:
   - deploy
   
 job:
-	tags:
-		- dosi
+  tags:
+    - dosi
   
 # Job pour construire l'image Docker
 build:
