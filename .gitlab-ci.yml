@@ -2,10 +2,9 @@ stages:
   - build
   - deploy
   
-# Job pour construire l'image Docker
-
+# Variables pour l'image Docker et le registre
 variables:
-  DOCKER_IMAGE: tetris_image
+  DOCKER_IMAGE: $REGISTRY/$PROJECT_PATH:$CI_COMMIT_REF_SLUG  # Inclure le registre et le tag de commit
   REGISTRY: gitlab-depinfo-2024.univ-brest.fr
   PROJECT_PATH: dosi/pic/elmoumouhi_houda/tetrisant
   
@@ -15,9 +14,10 @@ build:
   services:
     - docker:24.0.2-dind
   script:
-    - docker build -t $DOCKER_IMAGE .
-	- docker run -d --name test_container $DOCKER_IMAGE
-	- docker exec test_container ls -la .
+    - docker build -t $DOCKER_IMAGE .  # Construire l'image avec le nom complet
+    - docker run -d --name test_container $DOCKER_IMAGE  # Exécuter le conteneur en arrière-plan
+    - docker exec test_container ls -la .  # Lister les fichiers du conteneur
+    - docker push $DOCKER_IMAGE  # Pousser l'image vers le registre
   only:
     - branches
   tags: 
