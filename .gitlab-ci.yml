@@ -8,6 +8,11 @@ variables:
   REGISTRY: registry.gitlab.com
   PROJECT_PATH:  dosi/pic/dosi/pic/elmoumouhi_houda/tetrisant
   
+  
+before_script:
+  - docker info
+  - docker rm -f test_container || true
+  
 build:
   stage: build
   image: docker:24.0.2
