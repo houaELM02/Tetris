@@ -3,15 +3,21 @@ stages:
   - deploy
   
 # Job pour construire l'image Docker
+
+variables:
+  DOCKER_IMAGE: tetris_image
+  REGISTRY: gitlab-depinfo-2024.univ-brest.fr
+  PROJECT_PATH: dosi/pic/elmoumouhi_houda/tetrisant
+  
 build:
   stage: build
   image: docker:24.0.2
   services:
     - docker:24.0.2-dind
   script:
-    # Authentification si nécessaire (décommenter si tu pushes vers un registre privé)
-    # - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
-    - docker build -t registry.gitlab.com/dosi/pic/elmoumouhi_houda/tetrisant:$CI_COMMIT_REF_SLUG .
+    - docker build -t $DOCKER_IMAGE .
+	- docker run -d --name test_container $DOCKER_IMAGE
+	- docker exec test_container ls -la .
   only:
     - branches
   tags: 
